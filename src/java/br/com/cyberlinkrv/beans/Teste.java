@@ -10,4 +10,7 @@ public class Teste {
     
     //criado para mostrar o controle do Git
     
+    String teste;
+    int novo;
+    
 }
