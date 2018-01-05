@@ -22,25 +22,13 @@ public class daoMvVendas {
             try (PreparedStatement preparador = conn.prepareStatement(QuerySQL)) {
 
                 preparador.setString(1, mv.getControle());
-                //preparador.setString(2, mv.getNotaFiscalNumero());  
                 preparador.setDate(2, Date.valueOf(LocalDate.now()));
-                //preparador.setInt(3, mv.getParcelas());
                 preparador.setInt(3, mv.getIdCliente());
                 preparador.setInt(4, mv.getIdClienteConvenio());
-                //preparador.setInt(5, mv.getIdLogin());
-                //preparador.setString(8, mv.getTerminal());
-                //preparador.setString(9, mv.getTurno());
                 preparador.setDouble(5, mv.getVrTotal());
-                //preparador.setDouble(11, mv.getVrAdicional());
-                //preparador.setDouble(12, mv.getVrDinheiro());
-                //preparador.setDouble(13, mv.getVrCheque());
-                //preparador.setDouble(14, mv.getVrCartao());
-                //preparador.setDouble(15, mv.getVrCarne());
-                //preparador.setDouble(16, mv.getVrTicket());
                 preparador.setInt(6, mv.getEmAberto());
                 preparador.setDouble(7, mv.getVrPagtoParcial());
                 preparador.setInt(8, mv.getCodLancamento());
-                //preparador.setString(20, mv.getWebPagto());
 
                 preparador.executeUpdate();
 

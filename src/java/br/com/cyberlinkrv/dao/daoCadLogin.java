@@ -190,7 +190,7 @@ public class daoCadLogin {
                 cl.setInativo(resultado.getInt(6));
                 
                 
-                cl.setSenha("OK");//--Por Segurança so vai retornar OK
+                cl.setSenha("OK");//return
 
                 
             } else {
