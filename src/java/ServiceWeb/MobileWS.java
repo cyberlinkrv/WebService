@@ -1,9 +1,10 @@
 package ServiceWeb;
 
-import br.com.cyberlinkrv.objetos.*;
-import br.com.cyberlinkrv.ExecuteDAO;
+import br.com.cyberlinkrv.controller.controllerDao;
+import br.com.cyberlinkrv.bean.*;
 import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,10 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-
-
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -24,122 +22,297 @@ import javax.ws.rs.core.UriInfo;
 @Path("serviceMobile")
 public class MobileWS {
 
-    @Context
-    private UriInfo context;
-
     /**
      * Creates a new instance of MobileWS
      */
     public MobileWS() {
     }
 
-    @GET
-    @Produces (MediaType.APPLICATION_JSON)
-    @Path("Lista_MvVendas")
-    public String listaVendas() {
-        List<MobMvVendas> lista;
-        ExecuteDAO dao = new ExecuteDAO();
-        
-        lista = dao.buscarTodosMVVendas();
-        
-        Gson g = new Gson();
+    controllerDao dao = new controllerDao();
+    Gson g = new Gson();
 
-        return g.toJson(lista);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Listar_Orcamentos")
+    public Response listaOrcamentos() {
+        List<resListaOrc> lista;
+
+        lista = dao.listarTodosOrcamentos();
+
+        return Response.ok(g.toJson(lista))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Orcamento_Por_controle/{Controle}")
+    public Response buscarPorID(@PathParam("Controle") String controle) {
+        ArrayList<resLocporControle> mv;
+
+        mv = dao.buscarPorIdMV(controle);
+
+        return Response.ok(g.toJson(mv))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
 
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Login/{Login}/{Senha}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response cad_Login(@PathParam("Login") String Login, @PathParam("Senha") String Senha) {
+        cadLogin log;
+
+        log = dao.login(Login, Senha);
+
+        return Response.ok(g.toJson(log))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("ClienteTodos")
+    public Response CadClientes() {
+        List<cadClientes> lista;
+
+        lista = dao.buscarTudoCC();
+
+        return Response.ok(g.toJson(lista))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("ProdutosTodos")
+    public Response cad_Produtos() {
+        List<cadProdutos> lista;
+
+        lista = dao.buscarTudoCP();
+
+        return Response.ok(g.toJson(lista))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("Detalhes_Orcamentos")
+    public Response orcamentosLista() {
+        ArrayList<resRelatOrcamento> resp;
+
+        resp = dao.relatOrcamentos();
+
+        return Response.ok(g.toJson(resp))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("ConsultaConvenio/{Id}")
+    public Response consultaComvenio(@PathParam("Id") int Id) {
+
+        String Convenio;
+
+        Convenio = dao.convenioDoCliente(Id);
+
+        return Response.ok(g.toJson(Convenio))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("BuscarProdPNome/{nome}")
+    public Response consultaComvenio(@PathParam("nome") String nome) {
+
+        return Response.ok(g.toJson(dao.buscarPorNomeCP(nome)))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("AddProdutoNaListaOrcamento/{idProduto}/{vlr}/{qdt}")
+    public Response consultaComvenio(@PathParam("idProduto") String idProduto, @PathParam("vlr") String vlr, @PathParam("qdt") String qdt) {
+
+        tmpListProd tmp = new tmpListProd();
+        List<tmpListProd> lista = null;
+        cadProdutos produto;
+        double mult;
+        boolean resposta01;
+        boolean resposta02 = false;
+
+        tmp.setIdProduto(Integer.parseInt(idProduto));
+        tmp.setVlr(Double.parseDouble(vlr));
+        tmp.setQdt(Integer.parseInt(qdt));
+
+        mult = tmp.getVlr() * tmp.getQdt();
+
+        tmp.setVlr(mult);
+
+        produto = dao.buscarPorIdCP(Integer.parseInt(idProduto));
+
+        tmp.setNomeProd(produto.getNomeProduto());
+
+        resposta01 = dao.createTmp(); //
+
+        if (resposta01 == true) {
+
+            resposta02 = dao.inserirTmp(tmp);
+
+        }
+        if (resposta02 == true) {
+
+            lista = dao.buscarAlltmp();
+
+        }
+
+        return Response.ok(g.toJson(lista))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("ExcluirTmpList")
+    public Response consultaComvenio() {
+
+        boolean feito;
+
+        feito = dao.deleteTmp();
+
+        return Response.ok(g.toJson(feito))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("SomaTmp")
+    public Response somatmp() {
+
+        return Response.ok(g.toJson(dao.somaTotalTmp()))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("deletaItemTmp/{id}")
+    public Response deletaItemTmp(@PathParam("id") int id) {
+
+        return Response.ok(g.toJson(dao.excluirItemTmp(id)))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("buscaTudotmp")
+    public Response buscarTudotmp() {
+        List<tmpListProd> lista = null;
+
+        lista = dao.buscarAlltmp();
+
+        return Response.ok(g.toJson(lista))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("GravarOrcamento/{idClient}/{idUsuario}")
+    public Response gravarOrcamento(@PathParam("idClient") int idClient, @PathParam("idUsuario") int idUsuario) {
+        
+        int resposta = dao.gravar_(idClient, idUsuario);
+
+        return Response.ok(g.toJson(resposta))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
+    }
+
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("BuscarPorID_MvVendas/{ID}")
-    public String buscarPorID(@PathParam("ID") int id) {
-        MobMvVendas mv = new MobMvVendas();
-        ExecuteDAO dao = new ExecuteDAO();
-        Gson g = new Gson();
+    @Path("statusOrcamento/{status}")
+    public Response gravarOrcamento(@PathParam("status") String status) {
+        
+         statusPedidoWeb ped = dao.buscarPorIdSPW(status);
+         int statusDesc;
          
-        mv = dao.buscarPorIdMVvendas(id);
+         if(ped != null){
+             
+             statusDesc = 1;
+         }else{
+             
+             statusDesc = 2;
+         }
 
-        return g.toJson(mv);
-
+        return Response.ok(g.toJson(statusDesc))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("Login/{Login}") // Verificar a questão da Senha pois esta no banco criptografada
-    public String cad_Login(@PathParam("Login") String Login) {
-        ExecuteDAO dao = new ExecuteDAO();
-        CadLogin log = new CadLogin();
-        Gson g = new Gson();
-        
-        log = dao.buscarLogin(Login);
-       
-        return g.toJson(log);
-
-    }
-    
-    @GET
-    @Produces (MediaType.APPLICATION_JSON)
-    @Path("CadastroClientes")
-    public String cad_Clientes() {
-        List<CadCliente> lista;
-        ExecuteDAO dao = new ExecuteDAO();
-        Gson g = new Gson();
-        
-        lista = dao.buscarCadCliente();
-
-        return g.toJson(lista);
-
-    }
-    
-    @GET
-    @Produces (MediaType.APPLICATION_JSON)
-    @Path("CadastroProdutos")
-    public String cad_Produtos() {
-        List<CadProduto> lista;
-        ExecuteDAO dao = new ExecuteDAO();
-        Gson g = new Gson();
-        
-        lista = dao.buscarCadProdutos();
+    @Path("editarListOrcament/{cod}")
+    public Response editarOrcament(@PathParam("cod") String cod) {
         
         
-        return g.toJson(lista);
-
+        return Response.ok(g.toJson(dao.preenche(cod)))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("ExcluirPorID_MvVendas/{ID}")
-    public String excluir(@PathParam("ID") int ID) {
-        ExecuteDAO dao = new ExecuteDAO();
-        MobMvVendas m = new MobMvVendas();
-        Gson g = new Gson();
+    @Path("GravarEditado/{idClient}/{vrTotal}/{codLancament}/{controle}")
+    public Response excluirProdOrc(@PathParam("idClient") int idClient, 
+            @PathParam("vrTotal") String vrTotal,
+            @PathParam("codLancament") String codLancament, 
+            @PathParam("controle") String controle) {
 
-        m = dao.buscarPorIdMVvendas(ID);
+        boolean resp = dao.gravarEditad(idClient, vrTotal, codLancament, controle);
 
-        return g.toJson(dao.excluirMVVendas(m));
+        return Response.ok(g.toJson(resp))
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
-
-
+    
+    
+    
     /**
      * // * PUT method for updating or creating an instance of MobileWS // * //
+     *
      * * @param content representation for the resource //
+     * @param content
      */
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     public void old(String content) {
-               
     }
-    
-    @PUT
-    @Consumes("application/json")
-    @Path("Alterar_MvVendas")
-    public boolean alterar(String content) {
-        Gson g = new Gson();
-        ExecuteDAO dao = new ExecuteDAO();
-        
-        MobMvVendas u = (MobMvVendas) g.fromJson(content, MobMvVendas.class);
-        
-        return dao.alterarMVVendas(u);
-    }
-   
 
 }

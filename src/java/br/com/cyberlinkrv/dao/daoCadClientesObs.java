@@ -1,75 +1,162 @@
-package br.com.cyberlinkrv;
+package br.com.cyberlinkrv.dao;
 
-import br.com.cyberlinkrv.objetos.CadCliente;
+import br.com.cyberlinkrv.conector.*;
+import br.com.cyberlinkrv.bean.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Faculdade
- */
-public class DAOCadClientes {
+
+public class daoCadClientesObs {
+
+    protected boolean inserirCObs(cadClientesObs cobs) {
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "INSERT INTO cad_clientes_obs VALUES(null, ?, ?, ?, ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, cobs.getIdCliente());
+            preparador.setString(2, cobs.getObservacoes());
+            preparador.setBytes(3, cobs.getFoto());
+            preparador.setString(4, cobs.getFotoTipo());
+
+            preparador.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
     
-    //==========================Tabela cad_clientes ================================   
-    protected ArrayList<CadCliente> buscarCadCliente() {
+    protected boolean excluirCObs(cadClientesObs cobs) {
+        boolean resposta = false;
+        
+        try (Connection conn = conectorMySQL.obterConexao()){
 
-        ArrayList<CadCliente> lista = new ArrayList<CadCliente>();
+            String QuerySQL = "DELETE FROM cad_clientes_obs WHERE id=?";
 
-        try {
-            Connection conn = ConectorMySQL.obterConexao();
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
 
-            String queryBuscar = "SELECT * FROM cad_clientes";
+            preparador.setInt(1, cobs.getId());
 
-            PreparedStatement preparador = conn.prepareStatement(queryBuscar);
+            if (preparador.executeUpdate() > 0) {
 
-            ResultSet resultado = preparador.executeQuery();
+                resposta = true;
+
+                conn.close();
+            }
+            }
+
+        } catch (SQLException e) {
+
+            resposta = false;
+        }
+
+        return resposta;
+
+    }
+    
+    protected boolean alterarCObs(cadClientesObs cobs) {
+
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "UPDATE cad_clientes_obs SET (id_cliente = ?, "
+                    + "observacoes = ?, foto = ?, foto_tipo = ? WHERE id = ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, cobs.getIdCliente());
+            preparador.setString(2, cobs.getObservacoes());
+            preparador.setBytes(3, cobs.getFoto());
+            preparador.setString(4, cobs.getFotoTipo());
+
+            preparador.setInt(5, cobs.getId());
+
+            preparador.executeUpdate();
+
+            conn.close();
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+
+        return true;
+
+    }
+    
+    protected ArrayList<cadClientesObs> buscarTudoCObs() {
+
+        ArrayList<cadClientesObs> lista = new ArrayList<>();
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_clientes_obs";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            try(ResultSet resultado = preparador.executeQuery()){
 
             while (resultado.next()) {
 
-                CadCliente cadcliente = new CadCliente();
+                cadClientesObs cobs = new cadClientesObs();
 
-                cadcliente.setId(resultado.getInt(1));
-                cadcliente.setCod_barra(resultado.getString(2));
-                cadcliente.setNome_cliente(resultado.getString(3));
-                cadcliente.setCep(resultado.getString(4));
-                cadcliente.setEndereco(resultado.getString(5));
-                cadcliente.setBairro(resultado.getString(6));
-                cadcliente.setCidade(resultado.getString(7));
-                cadcliente.setUf(resultado.getString(8));
-                cadcliente.setEmail(resultado.getString(9));
-                cadcliente.setTelefone(resultado.getString(10));
-                cadcliente.setCelular(resultado.getString(11));
-                cadcliente.setCpf_cnpj(resultado.getString(12));
-                cadcliente.setRg_ie(resultado.getString(13));
-                cadcliente.setInf_adicional(resultado.getString(14));
-                cadcliente.setFaixa_salarial(resultado.getDouble(15));
-                cadcliente.setVr_maximo_compra(resultado.getDouble(16));
-                cadcliente.setDesconto_autom(resultado.getDouble(17));
-                cadcliente.setSaldo_compras(resultado.getDouble(18));
-                cadcliente.setPontos(resultado.getInt(19));
-                cadcliente.setEnviar_email(resultado.getInt(20));
-                cadcliente.setInativo(resultado.getInt(21));
-                cadcliente.setNascimento_dia(resultado.getInt(22));
-                cadcliente.setNascimento_mes(resultado.getInt(23));
-                cadcliente.setNascimento_ano(resultado.getString(24));
-                cadcliente.setData_cadastro(resultado.getDate(25));
-                cadcliente.setData_ultima_alteracao(resultado.getDate(26));
+                cobs.setId(resultado.getInt(1));
+                cobs.setIdCliente(resultado.getInt(2));
+                cobs.setObservacoes(resultado.getString(3));
+                cobs.setFoto(resultado.getBytes(4));
+                cobs.setFotoTipo(resultado.getString(5));
 
-                lista.add(cadcliente);
+                lista.add(cobs);
+            }
+            }
             }
 
-            conn.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return lista;
 
     }
 
+    protected cadClientesObs buscarPorIdCObs(int id) {
+        cadClientesObs cobs = null;
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_clientes_obs WHERE id=?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, id);
+
+            try(ResultSet resultado = preparador.executeQuery()){
+
+            if (resultado.next()) {
+
+                cobs = new cadClientesObs();
+
+                cobs.setId(resultado.getInt(1));
+                cobs.setIdCliente(resultado.getInt(2));
+                cobs.setObservacoes(resultado.getString(3));
+                cobs.setFoto(resultado.getBytes(4));
+                cobs.setFotoTipo(resultado.getString(5));
+
+            } else {
+                return null;
+            }
+            }
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return cobs;
+    }
     
 }

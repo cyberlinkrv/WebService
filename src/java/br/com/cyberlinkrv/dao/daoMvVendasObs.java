@@ -1,75 +1,159 @@
-package br.com.cyberlinkrv;
+package br.com.cyberlinkrv.dao;
 
-import br.com.cyberlinkrv.objetos.CadCliente;
+import br.com.cyberlinkrv.conector.*;
+import br.com.cyberlinkrv.bean.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Faculdade
- */
-public class DAOCadClientes {
+
+public class daoMvVendasObs {
+
     
-    //==========================Tabela cad_clientes ================================   
-    protected ArrayList<CadCliente> buscarCadCliente() {
+    protected boolean inserirMVO(mvVendasObs mvo) {
 
-        ArrayList<CadCliente> lista = new ArrayList<CadCliente>();
+        try (Connection conn = conectorMySQL.obterConexao()) {
 
-        try {
-            Connection conn = ConectorMySQL.obterConexao();
+            String QuerySQL = "INSERT INTO mv_vendas_obs VALUES(null, ?, ?, ?)";
 
-            String queryBuscar = "SELECT * FROM cad_clientes";
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
 
-            PreparedStatement preparador = conn.prepareStatement(queryBuscar);
+            preparador.setInt(1, mvo.getIdVenda());
+            preparador.setString(2, mvo.getControle());
+            preparador.setString(3, mvo.getObservacao());
 
-            ResultSet resultado = preparador.executeQuery();
+            preparador.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    protected boolean excluirMVO(mvVendasObs mvo) {
+        boolean resposta = false;
+        
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "DELETE FROM mv_vendas_obs WHERE id=?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, mvo.getId());
+
+            if (preparador.executeUpdate() > 0) {
+
+                resposta = true;
+
+                conn.close();
+            }
+            }
+
+        } catch (SQLException e) {
+
+            resposta = false;
+        }
+
+        return resposta;
+
+    }
+    
+    protected boolean alterarMVO(mvVendasObs mvo) {
+
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "UPDATE mv_vendas_obs SET (id_venda = ?, "
+                    + "controle = ?, observacao = ? WHERE id = ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, mvo.getIdVenda());
+            preparador.setString(2, mvo.getControle());
+            preparador.setString(3, mvo.getObservacao());
+
+            preparador.setInt(4, mvo.getId());
+
+            preparador.executeUpdate();
+
+            conn.close();
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+
+        return true;
+
+    }
+    
+    protected ArrayList<mvVendasObs> buscarTudoMVO() {
+
+        ArrayList<mvVendasObs> lista = new ArrayList<>();
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM mv_vendas_obs";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            try(ResultSet resultado = preparador.executeQuery()){
 
             while (resultado.next()) {
 
-                CadCliente cadcliente = new CadCliente();
+                mvVendasObs mvo = new mvVendasObs();
 
-                cadcliente.setId(resultado.getInt(1));
-                cadcliente.setCod_barra(resultado.getString(2));
-                cadcliente.setNome_cliente(resultado.getString(3));
-                cadcliente.setCep(resultado.getString(4));
-                cadcliente.setEndereco(resultado.getString(5));
-                cadcliente.setBairro(resultado.getString(6));
-                cadcliente.setCidade(resultado.getString(7));
-                cadcliente.setUf(resultado.getString(8));
-                cadcliente.setEmail(resultado.getString(9));
-                cadcliente.setTelefone(resultado.getString(10));
-                cadcliente.setCelular(resultado.getString(11));
-                cadcliente.setCpf_cnpj(resultado.getString(12));
-                cadcliente.setRg_ie(resultado.getString(13));
-                cadcliente.setInf_adicional(resultado.getString(14));
-                cadcliente.setFaixa_salarial(resultado.getDouble(15));
-                cadcliente.setVr_maximo_compra(resultado.getDouble(16));
-                cadcliente.setDesconto_autom(resultado.getDouble(17));
-                cadcliente.setSaldo_compras(resultado.getDouble(18));
-                cadcliente.setPontos(resultado.getInt(19));
-                cadcliente.setEnviar_email(resultado.getInt(20));
-                cadcliente.setInativo(resultado.getInt(21));
-                cadcliente.setNascimento_dia(resultado.getInt(22));
-                cadcliente.setNascimento_mes(resultado.getInt(23));
-                cadcliente.setNascimento_ano(resultado.getString(24));
-                cadcliente.setData_cadastro(resultado.getDate(25));
-                cadcliente.setData_ultima_alteracao(resultado.getDate(26));
+                mvo.setId(resultado.getInt(1));
+                mvo.setIdVenda(resultado.getInt(2));
+                mvo.setControle(resultado.getString(3));
+                mvo.setObservacao(resultado.getString(4));
 
-                lista.add(cadcliente);
+                lista.add(mvo);
+            }
+            }
             }
 
-            conn.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return lista;
 
     }
 
+    protected mvVendasObs buscarPorIdMVO(int id) {
+        mvVendasObs mvo = null;
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM mv_vendas_obs WHERE id = ?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, id);
+
+            try(ResultSet resultado = preparador.executeQuery()){
+
+            if (resultado.next()) {
+
+                mvo = new mvVendasObs();
+
+                mvo.setId(resultado.getInt(1));
+                mvo.setIdVenda(resultado.getInt(2));
+                mvo.setControle(resultado.getString(3));
+                mvo.setObservacao(resultado.getString(4));
+
+            } else {
+                return null;
+            }
+            }
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return mvo;
+    }
     
 }

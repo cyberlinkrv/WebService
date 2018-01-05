@@ -1578,7 +1578,7 @@ WADLParser.prototype = {
         /*
         <?xml version="1.0" encoding="UTF-8"?>
            <application xmlns="http://research.sun.com/wadl/2006/10">
-               <resources base="http://localhost:8080/NewCustomerDB/resources/">
+               <resources base="http://cyberlinkrv.comercial.ws/NewCustomerDB/resources/">
                    <resource path="/discountCodes/"> 
         */
     getAllResourcesFromWadl : function (content) {

@@ -7,7 +7,7 @@ import javax.ws.rs.core.Application;
  *
  * @author Cyber_Link_Recepcao
  */
-@javax.ws.rs.ApplicationPath("webresources")
+@javax.ws.rs.ApplicationPath("web")
 public class ApplicationConfig extends Application {
 
     @Override

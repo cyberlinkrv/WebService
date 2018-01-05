@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="http://wadl.dev.java.net/2009/02">
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.5.1 2014-01-02 13:43:00"/>
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://localhost:8084/MWS/web/application.wadl?detail=true"/>
+    <grammars/>
+    <resources base="http://localhost:8084/MWS/web/">
+        <resource path="serviceMobile">
+            <method id="old" name="PUT">
+                <request>
+                    <representation mediaType="application/json"/>
+                </request>
+            </method>
+            <resource path="Alterar_MvVendas">
+                <method id="alterar" name="PUT">
+                    <request>
+                        <representation mediaType="application/json"/>
+                    </request>
+                    <response/>
+                </method>
+            </resource>
+            <resource path="Lista_MvVendas">
+                <method id="listaVendas" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="CPbuscarTudo">
+                <method id="cad_Produtos" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="MVexcluirPorID/{ID}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
+                <method id="excluir" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="CCbuscarPorId/{ID}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
+                <method id="CadClientes" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="Login/{Login}/{Senha}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Senha" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Login" style="template" type="xs:string"/>
+                <method id="cad_Login" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="CCbuscarTudo">
+                <method id="CadClientes" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+            <resource path="MVbuscarPorId/{ID}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
+                <method id="buscarPorID" name="GET">
+                    <response>
+                        <representation mediaType="application/json"/>
+                    </response>
+                </method>
+            </resource>
+        </resource>
+    </resources>
+</application>

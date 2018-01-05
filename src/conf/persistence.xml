@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="MobileWebServicePU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>br.com.cyberlinkrv.objetos.newpackage.PdvArquivoOpcoes</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadTransportadora</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadEmpresa</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvVendasServico</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvEstoqueHistorico</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadProdutosObs</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadClientesVendedores</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadAliquota</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadLancamentosObs</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvVendasServicoMovimento</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvVendasLocado</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvLogin</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadPlanejamento</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadLancamentos</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.PdvArquivo</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadConta</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadCep</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.EtiConfig</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadCartoes</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.NotaConfigCampo</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadModoLancamento</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.PdvFormato</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.EtiConfigCampo</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.NotaConfig</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadProdutosKit</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvCaixa</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.MvNotaFiscal</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadAliquotaTributacao</class>
+    <class>br.com.cyberlinkrv.objetos.newpackage.CadLoginOrcamento</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.MvVendas</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadClassFiscal</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadClientesConvenio</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadClientesObs</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadMoedas</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.MvVendasMovimento</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadProdutos</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadClientes</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadFornecedores</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadProdutosGrade</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadLogin</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadProdutosTipo</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadLoginPerfil</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.CadProdutosFornecedores</class>
+    <class>br.com.cyberlinkrv.dao.objetos.bean.MvVendasObs</class>
+    <class>br.com.cyberlinkrv.bean.statusPedidoWeb</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Loja_Expert?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="djs052190"/>
+    </properties>
+  </persistence-unit>
+</persistence>

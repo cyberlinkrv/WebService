@@ -1,75 +1,152 @@
-package br.com.cyberlinkrv;
+package br.com.cyberlinkrv.dao;
 
-import br.com.cyberlinkrv.objetos.CadCliente;
+import br.com.cyberlinkrv.conector.*;
+import br.com.cyberlinkrv.bean.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Faculdade
- */
-public class DAOCadClientes {
+
+public class daoCadProdutosFornecedores {
     
-    //==========================Tabela cad_clientes ================================   
-    protected ArrayList<CadCliente> buscarCadCliente() {
+    protected boolean inserirCPF(cadProdutosFornecedores cpf) {
 
-        ArrayList<CadCliente> lista = new ArrayList<CadCliente>();
+        try (Connection conn = conectorMySQL.obterConexao()) {
 
-        try {
-            Connection conn = ConectorMySQL.obterConexao();
+            String QuerySQL = "INSERT INTO cad_produtos_fornecedores VALUES(null, ?, ?)";
 
-            String queryBuscar = "SELECT * FROM cad_clientes";
+           try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
 
-            PreparedStatement preparador = conn.prepareStatement(queryBuscar);
+            preparador.setInt(1, cpf.getIdProduto());
+            preparador.setInt(2, cpf.getIdFornecedor());
 
-            ResultSet resultado = preparador.executeQuery();
+            preparador.executeUpdate();
+           }
+
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    protected boolean excluirCPF(cadProdutosFornecedores cpf) {
+        boolean resposta = false;
+        
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "DELETE FROM cad_produtos_fornecedores WHERE id=?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, cpf.getId());
+
+            if (preparador.executeUpdate() > 0) {
+
+                resposta = true;
+
+                conn.close();
+            }
+            }
+        } catch (SQLException e) {
+
+            resposta = false;
+        }
+
+        return resposta;
+
+    }
+    
+    protected boolean alterarCPF(cadProdutosFornecedores cpf) {
+
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "UPDATE cad_produtos_fornecedores SET (id_produto = ?, "
+                    + "id_fornecedor = ? WHERE id = ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, cpf.getIdProduto());
+            preparador.setInt(2, cpf.getIdFornecedor());
+
+            preparador.setInt(3, cpf.getId());
+
+            preparador.executeUpdate();
+
+            conn.close();
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+
+        return true;
+
+    }
+    
+    protected ArrayList<cadProdutosFornecedores> buscarTudoCPF() {
+
+        ArrayList<cadProdutosFornecedores> lista = new ArrayList<>();
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_produtos_fornecedores";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            try(ResultSet resultado = preparador.executeQuery()){
 
             while (resultado.next()) {
 
-                CadCliente cadcliente = new CadCliente();
+                cadProdutosFornecedores cpf = new cadProdutosFornecedores();
 
-                cadcliente.setId(resultado.getInt(1));
-                cadcliente.setCod_barra(resultado.getString(2));
-                cadcliente.setNome_cliente(resultado.getString(3));
-                cadcliente.setCep(resultado.getString(4));
-                cadcliente.setEndereco(resultado.getString(5));
-                cadcliente.setBairro(resultado.getString(6));
-                cadcliente.setCidade(resultado.getString(7));
-                cadcliente.setUf(resultado.getString(8));
-                cadcliente.setEmail(resultado.getString(9));
-                cadcliente.setTelefone(resultado.getString(10));
-                cadcliente.setCelular(resultado.getString(11));
-                cadcliente.setCpf_cnpj(resultado.getString(12));
-                cadcliente.setRg_ie(resultado.getString(13));
-                cadcliente.setInf_adicional(resultado.getString(14));
-                cadcliente.setFaixa_salarial(resultado.getDouble(15));
-                cadcliente.setVr_maximo_compra(resultado.getDouble(16));
-                cadcliente.setDesconto_autom(resultado.getDouble(17));
-                cadcliente.setSaldo_compras(resultado.getDouble(18));
-                cadcliente.setPontos(resultado.getInt(19));
-                cadcliente.setEnviar_email(resultado.getInt(20));
-                cadcliente.setInativo(resultado.getInt(21));
-                cadcliente.setNascimento_dia(resultado.getInt(22));
-                cadcliente.setNascimento_mes(resultado.getInt(23));
-                cadcliente.setNascimento_ano(resultado.getString(24));
-                cadcliente.setData_cadastro(resultado.getDate(25));
-                cadcliente.setData_ultima_alteracao(resultado.getDate(26));
+                cpf.setId(resultado.getInt(1));
+                cpf.setIdProduto(resultado.getInt(2));
+                cpf.setIdFornecedor(resultado.getInt(3));
 
-                lista.add(cadcliente);
+                lista.add(cpf);
+            }
+            }
             }
 
-            conn.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return lista;
 
     }
 
+    protected cadProdutosFornecedores buscarPorIdCPF(int id) {
+        cadProdutosFornecedores cpf = null;
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_produtos_fornecedores WHERE id=?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, id);
+
+            try(ResultSet resultado = preparador.executeQuery()){
+
+            if (resultado.next()) {
+
+                cpf = new cadProdutosFornecedores();
+
+                cpf.setId(resultado.getInt(1));
+                cpf.setIdProduto(resultado.getInt(2));
+                cpf.setIdFornecedor(resultado.getInt(3));
+
+            } else {
+                return null;
+            }
+            }
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return cpf;
+    }
     
 }

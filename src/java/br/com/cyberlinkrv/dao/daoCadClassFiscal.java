@@ -1,75 +1,156 @@
-package br.com.cyberlinkrv;
+package br.com.cyberlinkrv.dao;
 
-import br.com.cyberlinkrv.objetos.CadCliente;
+import br.com.cyberlinkrv.conector.*;
+import br.com.cyberlinkrv.bean.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Faculdade
- */
-public class DAOCadClientes {
+
+public class daoCadClassFiscal {
+  
+    protected boolean inserirCCF(cadClassFiscal ccf) {
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "INSERT INTO cad_class_fiscal VALUES(null, ?, ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setString(1, ccf.getLegenda());
+            preparador.setString(2, ccf.getCodigo());
+
+            preparador.executeUpdate();
+            
+            
+            return true;
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
     
-    //==========================Tabela cad_clientes ================================   
-    protected ArrayList<CadCliente> buscarCadCliente() {
+    protected boolean excluirCCF(cadClassFiscal ccf) {
+        boolean resposta = false;
+        
+        try (Connection conn = conectorMySQL.obterConexao()){
 
-        ArrayList<CadCliente> lista = new ArrayList<CadCliente>();
+            String QuerySQL = "DELETE FROM cad_class_fiscal WHERE id=?";
 
-        try {
-            Connection conn = ConectorMySQL.obterConexao();
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
 
-            String queryBuscar = "SELECT * FROM cad_clientes";
+            preparador.setInt(1, ccf.getId());
 
-            PreparedStatement preparador = conn.prepareStatement(queryBuscar);
+            if (preparador.executeUpdate() > 0) {
 
-            ResultSet resultado = preparador.executeQuery();
+                resposta = true;
+
+                conn.close();
+            }
+            }
+
+        } catch (SQLException e) {
+
+            resposta = false;
+        }
+
+        return resposta;
+
+    }
+    
+    protected boolean alterarCCF(cadClassFiscal ccf) {
+
+        try (Connection conn = conectorMySQL.obterConexao()){
+
+            String QuerySQL = "UPDATE cad_class_fiscal SET (legenda = '?, "
+                    + "codigo = '?' WHERE id = ?)";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setString(1, ccf.getLegenda());
+            preparador.setString(2, ccf.getCodigo());
+
+            preparador.setInt(3, ccf.getId());
+
+            preparador.executeUpdate();
+
+            conn.close();
+            }
+
+        } catch (SQLException e) {
+            return false;
+        }
+
+        return true;
+
+    }
+    
+    protected ArrayList<cadClassFiscal> buscarTudoCCF() {
+
+        ArrayList<cadClassFiscal> lista = new ArrayList<>();
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_class_fiscal";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            try(ResultSet resultado = preparador.executeQuery()){
 
             while (resultado.next()) {
 
-                CadCliente cadcliente = new CadCliente();
+                cadClassFiscal ccf = new cadClassFiscal();
 
-                cadcliente.setId(resultado.getInt(1));
-                cadcliente.setCod_barra(resultado.getString(2));
-                cadcliente.setNome_cliente(resultado.getString(3));
-                cadcliente.setCep(resultado.getString(4));
-                cadcliente.setEndereco(resultado.getString(5));
-                cadcliente.setBairro(resultado.getString(6));
-                cadcliente.setCidade(resultado.getString(7));
-                cadcliente.setUf(resultado.getString(8));
-                cadcliente.setEmail(resultado.getString(9));
-                cadcliente.setTelefone(resultado.getString(10));
-                cadcliente.setCelular(resultado.getString(11));
-                cadcliente.setCpf_cnpj(resultado.getString(12));
-                cadcliente.setRg_ie(resultado.getString(13));
-                cadcliente.setInf_adicional(resultado.getString(14));
-                cadcliente.setFaixa_salarial(resultado.getDouble(15));
-                cadcliente.setVr_maximo_compra(resultado.getDouble(16));
-                cadcliente.setDesconto_autom(resultado.getDouble(17));
-                cadcliente.setSaldo_compras(resultado.getDouble(18));
-                cadcliente.setPontos(resultado.getInt(19));
-                cadcliente.setEnviar_email(resultado.getInt(20));
-                cadcliente.setInativo(resultado.getInt(21));
-                cadcliente.setNascimento_dia(resultado.getInt(22));
-                cadcliente.setNascimento_mes(resultado.getInt(23));
-                cadcliente.setNascimento_ano(resultado.getString(24));
-                cadcliente.setData_cadastro(resultado.getDate(25));
-                cadcliente.setData_ultima_alteracao(resultado.getDate(26));
+                ccf.setId(resultado.getInt(1));
+                ccf.setLegenda(resultado.getString(2));
+                ccf.setCodigo(resultado.getString(3));
 
-                lista.add(cadcliente);
+                lista.add(ccf);
+            }
+            }
             }
 
-            conn.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return lista;
 
     }
 
+    protected cadClassFiscal buscarPorIdCCF(int id) {
+        cadClassFiscal ccf = null;
+
+        try (Connection conn = conectorMySQL.obterConexao()) {
+
+            String QuerySQL = "SELECT * FROM cad_class_fiscal WHERE id=?";
+
+            try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
+
+            preparador.setInt(1, id);
+
+            try(ResultSet resultado = preparador.executeQuery()){
+
+            if (resultado.next()) {
+
+                ccf = new cadClassFiscal();
+
+                ccf.setId(resultado.getInt(1));
+                ccf.setLegenda(resultado.getString(2));
+                ccf.setCodigo(resultado.getString(3));
+
+            } else {
+                return null;
+            }
+            }
+            }
+
+        } catch (SQLException e) {
+        }
+
+        return ccf;
+    }
     
 }

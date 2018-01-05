@@ -4,12 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/ServiceWeb/ApplicationConfig.java</file>
-            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/objetos/MobileMvVendas.java</file>
             <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/ServiceWeb/MobileWS.java</file>
-            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/objetos/MobMvVendasObs.java</file>
-            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/objetos/CadCliente.java</file>
-            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/objetos/MobMvVendas.java</file>
-            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/beans/Teste.java</file>
+            <file>file:/Users/CyberhouseBR/Desktop/NetBeansProjects/WebService/src/java/br/com/cyberlinkrv/conector/conectorMySQL.java</file>
         </group>
     </open-files>
 </project-private>
