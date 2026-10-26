@@ -169,7 +169,7 @@ public class daoCadLogin {
 
         try (Connection conn = conectorMySQL.obterConexao()) {
 
-            String QuerySQL = "SELECT * FROM cad_login WHERE login=? and senha = ?";
+            String QuerySQL = "SELECT * FROM cad_login WHERE login=? and senha = ? AND (inativo IS NULL OR inativo = 0)";
 
             try(PreparedStatement preparador = conn.prepareStatement(QuerySQL)){
 

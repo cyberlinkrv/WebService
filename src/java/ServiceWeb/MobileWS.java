@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -60,14 +61,23 @@ public class MobileWS {
 
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("Login/{Login}/{Senha}")
+    @Path("Login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response cad_Login(@PathParam("Login") String Login, @PathParam("Senha") String Senha) {
-        cadLogin log;
+    public Response cad_Login(cadLogin credenciais) {
+        if (credenciais == null
+                || credenciais.getLogin() == null
+                || credenciais.getLogin().trim().isEmpty()
+                || credenciais.getSenha() == null
+                || credenciais.getSenha().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
-        log = dao.login(Login, Senha);
+        cadLogin log = dao.login(credenciais.getLogin(), credenciais.getSenha());
+        if (log == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
 
         return Response.ok(g.toJson(log))
                 .header("Access-Control-Allow-Origin", "*")
@@ -144,7 +154,7 @@ public class MobileWS {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("AddProdutoNaListaOrcamento/{idProduto}/{vlr}/{qdt}")
     public Response consultaComvenio(@PathParam("idProduto") String idProduto, @PathParam("vlr") String vlr, @PathParam("qdt") String qdt) {
@@ -187,7 +197,7 @@ public class MobileWS {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("ExcluirTmpList")
     public Response consultaComvenio() {
@@ -213,7 +223,7 @@ public class MobileWS {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("deletaItemTmp/{id}")
     public Response deletaItemTmp(@PathParam("id") int id) {
@@ -238,7 +248,7 @@ public class MobileWS {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("GravarOrcamento/{idClient}/{idUsuario}")
     public Response gravarOrcamento(@PathParam("idClient") int idClient, @PathParam("idUsuario") int idUsuario) {
@@ -286,7 +296,7 @@ public class MobileWS {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
     }
     
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("GravarEditado/{idClient}/{vrTotal}/{codLancament}/{controle}")
     public Response excluirProdOrc(@PathParam("idClient") int idClient, 
