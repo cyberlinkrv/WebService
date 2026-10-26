@@ -1,78 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://wadl.dev.java.net/2009/02">
-    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.5.1 2014-01-02 13:43:00"/>
-    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://localhost:8084/MWS/web/application.wadl?detail=true"/>
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.48"/>
+    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="Descrição simplificada dos recursos publicados. Para a descrição completa, use application.wadl?detail=true."/>
     <grammars/>
-    <resources base="http://localhost:8084/MWS/web/">
+    <resources base="./">
         <resource path="serviceMobile">
-            <method id="old" name="PUT">
-                <request>
-                    <representation mediaType="application/json"/>
-                </request>
-            </method>
-            <resource path="Alterar_MvVendas">
-                <method id="alterar" name="PUT">
-                    <request>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response/>
-                </method>
+            <resource path="Listar_Orcamentos">
+                <method id="listaOrcamentos" name="GET"><response><representation mediaType="application/json"/></response></method>
             </resource>
-            <resource path="Lista_MvVendas">
-                <method id="listaVendas" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="CPbuscarTudo">
-                <method id="cad_Produtos" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="MVexcluirPorID/{ID}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
-                <method id="excluir" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="CCbuscarPorId/{ID}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
-                <method id="CadClientes" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
+            <resource path="Orcamento_Por_controle/{Controle}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Controle" style="template" type="xs:string"/>
+                <method id="buscarPorID" name="GET"><response><representation mediaType="application/json"/></response></method>
             </resource>
             <resource path="Login">
                 <method id="cad_Login" name="POST">
-                    <request>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
+                    <request><representation mediaType="application/json"/></request>
+                    <response><representation mediaType="application/json"/></response>
                 </method>
             </resource>
-            <resource path="CCbuscarTudo">
-                <method id="CadClientes" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
+            <resource path="ClienteTodos">
+                <method id="CadClientes" name="GET"><response><representation mediaType="application/json"/></response></method>
             </resource>
-            <resource path="MVbuscarPorId/{ID}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ID" style="template" type="xs:int"/>
-                <method id="buscarPorID" name="GET">
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
+            <resource path="ProdutosTodos">
+                <method id="cad_Produtos" name="GET"><response><representation mediaType="application/json"/></response></method>
             </resource>
+            <resource path="Detalhes_Orcamentos">
+                <method id="orcamentosLista" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="ConsultaConvenio/{Id}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Id" style="template" type="xs:int"/>
+                <method id="consultaConvenioPorId" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="BuscarProdPNome/{nome}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="nome" style="template" type="xs:string"/>
+                <method id="buscarProdutoPorNome" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="AddProdutoNaListaOrcamento/{idProduto}/{vlr}/{qdt}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="idProduto" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="vlr" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="qdt" style="template" type="xs:string"/>
+                <method id="addProdutoNaListaOrcamento" name="POST"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="ExcluirTmpList">
+                <method id="excluirTmpList" name="POST"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="SomaTmp">
+                <method id="somaTmp" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="deletaItemTmp/{id}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="id" style="template" type="xs:int"/>
+                <method id="deletaItemTmp" name="POST"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="buscaTudotmp">
+                <method id="buscarTudotmp" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="GravarOrcamento/{idClient}/{idUsuario}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="idClient" style="template" type="xs:int"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="idUsuario" style="template" type="xs:int"/>
+                <method id="gravarOrcamento" name="POST"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="statusOrcamento/{status}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="status" style="template" type="xs:string"/>
+                <method id="verificarStatusOrcamento" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="editarListOrcament/{cod}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="cod" style="template" type="xs:string"/>
+                <method id="editarListOrcament" name="GET"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <resource path="GravarEditado/{idClient}/{vrTotal}/{codLancament}/{controle}">
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="idClient" style="template" type="xs:int"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="vrTotal" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="codLancament" style="template" type="xs:string"/>
+                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="controle" style="template" type="xs:string"/>
+                <method id="gravarEditado" name="POST"><response><representation mediaType="application/json"/></response></method>
+            </resource>
+            <method id="old" name="PUT"><request><representation mediaType="application/json"/></request></method>
         </resource>
     </resources>
 </application>

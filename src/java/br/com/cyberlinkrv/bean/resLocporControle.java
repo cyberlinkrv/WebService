@@ -5,7 +5,6 @@
  */
 package br.com.cyberlinkrv.bean;
 
-import com.mysql.fabric.xmlrpc.base.Data;
 import java.util.Date;
 
 /**

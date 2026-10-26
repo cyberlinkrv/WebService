@@ -20,8 +20,9 @@
 - As respostas ainda enviam `Access-Control-Allow-Origin: *`. CORS não substitui autenticação, mas deve ser limitado a origens conhecidas quando houver clientes web; a origem correta dos clientes Cordova precisa ser confirmada antes de restringir.
 - O esquema legado compara senha diretamente no banco. Migrar para hash forte (Argon2id/bcrypt/PBKDF2 com salt) exige atualização coordenada dos registros existentes, não apenas mudança de código.
 - Vários parâmetros de operações mutáveis ainda estão no caminho da URL; a próxima versão deve mover esses dados para corpos JSON e usar DTOs validados.
-- O repositório distribui bibliotecas Java/JAR antigas e não contém manifesto moderno de dependências. É necessária análise de CVEs e atualização controlada do servidor, Jersey, EclipseLink, Gson e driver MySQL.
+- Jersey, EclipseLink/JPA, Gson, JUnit, Hamcrest e seus transitivos foram atualizados para as versões compatíveis documentadas em [DEPENDENCY_UPDATES.md](DEPENDENCY_UPDATES.md). A análise não equivale a garantia de ausência de CVEs ou suporte contínuo.
+- O Connector/J MySQL ainda está em 5.1.39 até confirmar a versão do MySQL Server; Tomcat também exige confirmação/atualização fora do repositório. Não implante esse driver antigo como se estivesse corrigido.
 
 ## Validação
 
-A configuração foi revisada estaticamente. Não foi possível executar o build Ant: `ant` não está instalado neste ambiente. O contrato alterado requer teste de integração com banco de homologação e atualização do app antes do deploy. A senha presente no histórico também requer rotação; remover texto do último commit não apaga seu histórico Git.
+`ant -q clean dist` concluiu com sucesso; o código principal e os testes também compilaram com `javac --release 8`. Os testes JUnit não foram executados porque chamam operações DAO que podem gravar no banco. O contrato alterado requer teste de integração em homologação e atualização do app antes do deploy. A senha presente no histórico também requer rotação; remover texto do último commit não apaga seu histórico Git.
