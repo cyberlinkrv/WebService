@@ -48,10 +48,11 @@
                     </response>
                 </method>
             </resource>
-            <resource path="Login/{Login}/{Senha}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Senha" style="template" type="xs:string"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="Login" style="template" type="xs:string"/>
-                <method id="cad_Login" name="GET">
+            <resource path="Login">
+                <method id="cad_Login" name="POST">
+                    <request>
+                        <representation mediaType="application/json"/>
+                    </request>
                     <response>
                         <representation mediaType="application/json"/>
                     </response>

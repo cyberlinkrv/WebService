@@ -48,11 +48,5 @@
     <class>br.com.cyberlinkrv.dao.objetos.bean.MvVendasObs</class>
     <class>br.com.cyberlinkrv.bean.statusPedidoWeb</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Loja_Expert?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="djs052190"/>
-    </properties>
   </persistence-unit>
 </persistence>
